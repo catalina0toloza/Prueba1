@@ -23,9 +23,9 @@
 			<h2>En alguna parte del mundo</h2>
 			<p>Usaré espanglish:</p>
 			<p>El <a href="https://earthquake.usgs.gov/">Earthquake Hazards Program</a> del <a href="https://www.usgs.gov/">USGS</a>, tiene un servicio de <a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php">GeoJSON Summary Format</a>, donde pueder is a buscar data sobre los movimientos telúricos alrededor del mundo.</p>
-			<p>Consultando el registro de los M4.5+ Earthquakes del Past Day, yo puedo asegurarles de que el último movimento ocurrió por acá: <span id="lugar"></span>.</p>
+			<p>Consultando el registro de los M4.5+ Earthquakes del Past Day, podemos enterarnos que el último registro correspondiente a un movimientoyo puedo asegurarles de que el último movimento de M<span id="lugar"></span><span id="hora"></span><span id="coord"></span><span id="magnitud"></span>.</p>
 			<p>Para ser más preciso, este es el epicentro registrado:</p>
-			<div id="mapid" ></div>
+			<div id="mapid"></div>
 			<p>Si quieren ver la hora a la que ocurrió este movimiento telúrico, métanse a la consola de Javascript del Navegador, allí hay un número raro. Ese número es un Unix Timestamp, que pueden traducir en <a href="https://www.unixtimestamp.com/" target="_blank">https://www.unixtimestamp.com/</a></p>
 		</div>
 		<div class="col-sm-6 pb-5">
@@ -37,7 +37,7 @@
 		<div class="col-sm-12" style="border-top:1px solid #eee;">
 			<div class="row pt-3 pb-4 small">
 				<div class="col-sm-9">
-					<p>Seminario Gráfica Computacional I 2018, Primer Semestre → Clase 1 → Viernes 16 de marzo</p>
+					<p>Seminario Gráfica Computacional I 2018, Primer Semestre ? Clase 1 ? Viernes 16 de marzo</p>
 				</div>
 				<div class="col-sm-3 text-right">
 					<p><a href="weather.html">Continuar</a></p>
@@ -47,9 +47,8 @@
 	</div>
 </div>
 <script>
-    
-    var url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.geojson"
-    
+
+var url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.geojson"
 var request = new XMLHttpRequest();
 request.open('GET', url, true);
 request.onload = function () {
@@ -57,18 +56,16 @@ request.onload = function () {
 	var lat = data.features[0].geometry.coordinates[1];
 	var lon = data.features[0].geometry.coordinates[0];
 	var where = data.features[0].properties.place;
-	var when = new Date (data.features [0].properties.time);
-    var whenUTC = when.toUTCString (); 
+	var when = new Date(data.features[0].properties.time);
+    var whenUTC = when.toUTCString();
 	var magnitud = data.features[0].properties.mag
-	
-    document.getElementById ("magnitud").innerHTML = magnitud; 
+	document.getElementById("magnitud").innerHTML = magnitud;
     document.getElementById("lugar").innerHTML = where.split(',')[1];
-    document.getElementById("hora").innerHTML = whenUTC.split ('')[4];
-    document.getElementById("coords").innerHTML = "("+ lat + "," + lon +")";
-    
+    document.getElementById("hora").innerHTML = whenUTC.split(' ')[4];
+    document.getElementById("coord").innerHTML = "("+ lat + "," + lon + ")";
 	console.log(data);
-	console.log(when);
-    console.log(whenUTC);
+    console.log(data.features[0].properties.time);
+	console.log(whenUTC);
     console.log(data.features[0].properties.place);
 	//mapa
 	var mymap = L.map('mapid').setView([lat, lon], 2);
@@ -84,4 +81,5 @@ request.send();
 </script>
 </body>
 </html>
+
 
